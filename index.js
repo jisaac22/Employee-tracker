@@ -21,7 +21,7 @@ const employeeUpdate = () => {
         }
     ]).then( function(answer) {
       console.log(answer.employeeChoice)
-    }) 
-}
+    }); 
+};
 
 employeeUpdate()
