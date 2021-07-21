@@ -21,16 +21,17 @@ const employeeUpdate = () => {
             message: "What would you like to do?",
             choices:['View all Employees', 
                       'View Employees by Department', 
-                      'Remove Employees', 
-                      'View all Employees by Manager', 
-                      'Add Employee', 
-                      'Remove Employee', 
+                      'Add Employee',
                       'Update Empoyee Role',
-                      'Update Employee Manager'
                     ]
         }
-    ]).then( function(answer) {
-      console.log(answer.employeeChoice)
+    ]).then((answer) => {
+      switch(answer.employeeChoice){
+        case 'View all Employees':
+          viewAllEmployees();
+          break;
+      }
+      
     }); 
 };
 

@@ -25,6 +25,6 @@ PRIMARY KEY (id)
 -- table for employee department 
 CREATE TABLE employee_Department (
 id INTEGER(11) AUTO_INCREMENT NOT NULL,
-name VARCHAR(30),
+department_name VARCHAR(30),
 PRIMARY KEY (id) 
 )
