@@ -24,7 +24,9 @@ const employeeUpdate = () => {
                       'View Departments',
                       'View Roles', 
                       'Add Employee',
-                      'Update Empoyee Role',
+                      'Add Departments',
+                      'Add Roles',
+                      'Update Employee Role',
                     ]
         }
     ]).then((answer) => {
@@ -39,6 +41,10 @@ const employeeUpdate = () => {
 
         case 'View Roles':
           viewRoles();
+          break;  
+
+        case 'Add Employee':
+          addEmployee();
           break;  
       }
       
@@ -76,5 +82,46 @@ const viewRoles = () => {
     console.log('Viewing Roles')
     console.table(res)
   })
+};
+// function to add new employee
+const addEmployee = () => {
+  inquirer.prompt([
+    {
+      type: 'input',
+      message: 'What is employees first name?',
+      name: 'firstName'
+    },
+    { 
+      type: 'input',
+      message: 'What is employees last name?',
+      name: 'lastName'
+    },
+    {
+      type: 'input',
+      message: 'What is employees role id?',
+      name: 'roleId'
+    },
+    {
+      type: 'input',
+      message: 'What is employees manager id?',
+      name: 'managersId'
+    }
+  ]).then((answers)=>{
+    connection.query(`INSERT INTO employee SET ?`,
+    {
+      first_name: answers.firstName,
+      last_name: answers.lastName,
+      role_id: answers.roleId,
+      manager_id: answers.managersId
+    },
+    (err) => {
+      if (err) throw err;
+      console.log('Added employee')
+      console.table(answers)
+      employeeUpdate()
+    })
+  })
 }
+
+
 employeeUpdate()
