@@ -1,7 +1,8 @@
 // packages to run app
 const inquirer = require('inquirer')
 const fs = require('fs')
-const mysql = require('mysql')
+const mysql = require('mysql');
+const { allowedNodeEnvironmentFlags } = require('process');
 require('console.table')
 
 // create the connection information for the sql database
@@ -27,6 +28,7 @@ const employeeUpdate = () => {
                       'Add Departments',
                       'Add Roles',
                       'Update Employee Role',
+                      'Exit'
                     ]
         }
     ]).then((answer) => {
@@ -50,6 +52,10 @@ const employeeUpdate = () => {
         case 'Add Departments':
           addDepartment();
           break;  
+
+        case 'Add Roles':
+          addRoles();
+          break;
       }
       
     }); 
@@ -131,7 +137,7 @@ const addDepartment = () =>{
   inquirer.prompt([
     {
       type: 'input',
-      message: 'What department would you like to add',
+      message: 'What department would you like to add?',
       name: 'newDept'
     }
   ]).then((answers) => {
@@ -141,11 +147,39 @@ const addDepartment = () =>{
     },
     (err) => {
       if (err) throw err;
-      console.log('Added New Department')
+      console.log('Added new Department')
       console.table(answers)
       employeeUpdate()
     })
   })
 };
+// function to add roles
+const addRoles = () =>{
+  inquirer.prompt([
+    {
+      type: 'input',
+      message: 'What role would you like to add?',
+      name: 'newRole'
+    },
+    {
+      type: 'input',
+      message: 'What is the salary?',
+      name: 'salary'
+    }
+  ]).then((answers)=> {
+    connection.query(`INSERT INTO employee_Role SET ?`,
+    {
+      title: answers.newRole,
+      salary: answers.salary
+    },
+    (err) => {
+      if (err) throw err;
+      console.log('Added new Role')
+      console.table(answers)
+      employeeUpdate()
+    })
+  })
+}
+
 
 employeeUpdate()
