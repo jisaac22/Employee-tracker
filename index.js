@@ -60,7 +60,7 @@ connection.query(query, (err, res) =>{
 };
 // function to view all Departments
 const viewDepartments = () => {
-  const query = `SELECT * FROM employee_Dept`
+  const query = `SELECT dept_name FROM employee_Dept`
   connection.query(query, (err, res) => {
     if (err) throw err
     console.log('Viewing Departments')
@@ -70,7 +70,7 @@ const viewDepartments = () => {
 }
 //  function to view all roles
 const viewRoles = () => {
-  const query = `SELECT * FROM employee_Role`
+  const query = `SELECT title FROM employee_Role`
   connection.query(query, (err, res) => {
     if (err) throw err
     console.log('Viewing Roles')
