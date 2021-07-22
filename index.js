@@ -46,6 +46,10 @@ const employeeUpdate = () => {
         case 'Add Employee':
           addEmployee();
           break;  
+
+        case 'Add Departments':
+          addDepartment();
+          break;  
       }
       
     }); 
@@ -121,7 +125,27 @@ const addEmployee = () => {
       employeeUpdate()
     })
   })
-}
-
+};
+// function to add new department
+const addDepartment = () =>{
+  inquirer.prompt([
+    {
+      type: 'input',
+      message: 'What department would you like to add',
+      name: 'newDept'
+    }
+  ]).then((answers) => {
+    connection.query(`INSERT INTO employee_Dept SET ?`,
+    {
+      dept_name: answers.newDept
+    },
+    (err) => {
+      if (err) throw err;
+      console.log('Added New Department')
+      console.table(answers)
+      employeeUpdate()
+    })
+  })
+};
 
 employeeUpdate()
