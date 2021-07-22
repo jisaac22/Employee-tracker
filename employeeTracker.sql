@@ -23,8 +23,8 @@ PRIMARY KEY (id)
 );
 
 -- table for employee department 
-CREATE TABLE employee_Department (
+CREATE TABLE employee_Dept(
 id INTEGER(11) AUTO_INCREMENT NOT NULL,
-department_name VARCHAR(30),
+dept_name VARCHAR(30),
 PRIMARY KEY (id) 
 )
