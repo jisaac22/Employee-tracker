@@ -2,6 +2,7 @@
 const inquirer = require('inquirer')
 const fs = require('fs')
 const mysql = require('mysql')
+require('console.table')
 
 // create the connection information for the sql database
 const connection = mysql.createConnection({
@@ -35,4 +36,17 @@ const employeeUpdate = () => {
     }); 
 };
 
+const viewAllEmployees = () =>{
+const query = `SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, employee_dept.dept_name, employee_role.salary, CONCAT(manager.first_name,'', manager.last_name) AS manager
+FROM employee 
+LEFT JOIN employee manager ON manager.id = employee.manager_id
+INNER JOIN employee_Role ON employee.role_id = employee_Role.id
+INNER JOIN employee_Dept ON employee_Dept.id = employee_Role.department_id;`
+connection.query(query, (err, res) =>{
+  if (err) throw err
+  console.log("View all employees")
+  console.table(res)
+  employeeUpdate()
+})
+}
 employeeUpdate()
