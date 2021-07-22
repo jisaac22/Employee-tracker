@@ -21,7 +21,8 @@ const employeeUpdate = () => {
             name:'employeeChoice',
             message: "What would you like to do?",
             choices:['View all Employees', 
-                      'View Employees by Department', 
+                      'View Departments',
+                      'View Roles', 
                       'Add Employee',
                       'Update Empoyee Role',
                     ]
@@ -31,11 +32,19 @@ const employeeUpdate = () => {
         case 'View all Employees':
           viewAllEmployees();
           break;
+        
+        case 'View Departments':
+          viewDepartments();
+          break;
+
+        case 'View Roles':
+          viewRoles();
+          break;  
       }
       
     }); 
 };
-
+// function to view all Employees information
 const viewAllEmployees = () =>{
 const query = `SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, employee_dept.dept_name, employee_role.salary, CONCAT(manager.first_name,'', manager.last_name) AS manager
 FROM employee 
@@ -48,5 +57,24 @@ connection.query(query, (err, res) =>{
   console.table(res)
   employeeUpdate()
 })
+};
+// function to view all Departments
+const viewDepartments = () => {
+  const query = `SELECT * FROM employee_Dept`
+  connection.query(query, (err, res) => {
+    if (err) throw err
+    console.log('Viewing Departments')
+    console.table(res)
+    employeeUpdate()
+  })
+}
+//  function to view all roles
+const viewRoles = () => {
+  const query = `SELECT * FROM employee_Role`
+  connection.query(query, (err, res) => {
+    if (err) throw err
+    console.log('Viewing Roles')
+    console.table(res)
+  })
 }
 employeeUpdate()
