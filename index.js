@@ -2,8 +2,9 @@
 const inquirer = require('inquirer')
 const fs = require('fs')
 const mysql = require('mysql');
-const { allowedNodeEnvironmentFlags } = require('process');
 require('console.table')
+let employeesArray = [];
+let rolesArray = [];
 
 // create the connection information for the sql database
 const connection = mysql.createConnection({
@@ -56,6 +57,12 @@ const employeeUpdate = () => {
         case 'Add Roles':
           addRoles();
           break;
+
+        case 'Update Employee Role':
+          updateEmployeeRole();
+          break;
+          
+          
       }
       
     }); 
@@ -84,13 +91,21 @@ const viewDepartments = () => {
     employeeUpdate()
   })
 }
+
+
 //  function to view all roles
 const viewRoles = () => {
+  rolesArray = []
   const query = `SELECT title FROM employee_Role`
   connection.query(query, (err, res) => {
-    if (err) throw err
+    if (err) throw err;
+    res.forEach(({title}) => {
+      rolesArray.push(title);
     console.log('Viewing Roles')
     console.table(res)
+    console.log(rolesArray)
+    employeeUpdate()
+    })  
   })
 };
 // function to add new employee
@@ -129,6 +144,7 @@ const addEmployee = () => {
       console.log('Added employee')
       console.table(answers)
       employeeUpdate()
+
     })
   })
 };
@@ -180,6 +196,51 @@ const addRoles = () =>{
     })
   })
 }
-
-
+// function to push into empty array 
+ employeesArray = [];
+   const query = 'SELECT first_name FROM employee';
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        res.forEach(({first_name}) => {
+            employeesArray.push(first_name);
+        });
+    });
+    rolesArray = []
+    const query2 = `SELECT title FROM employee_Role`
+    connection.query(query2, (err, res) => {
+      if (err) throw err;
+      res.forEach(({title}) => {
+        rolesArray.push(title);
+ });
+ });
+// function to update employee role 
+const updateEmployeeRole = () =>{
+    inquirer.prompt([
+    {
+      type: 'list',
+      message: 'Which employee would you like to update?',
+      choices: employeesArray,
+      name: 'roleUpdate'
+    },
+    {
+      type: 'list',
+      message: 'What would you like for the new role',
+      choices: rolesArray,
+      name: 'newRole'
+    }
+  ]).then((answers)=>{
+    connection.query(`UPDATE employee_Role SET title = ? WHERE first_name = ?`,
+    {
+      title: answers.newRole,
+      first_name: answers.roleUpdate
+    },
+    (err) => {
+     if (err) throw err;
+     console.log('Updated Employee Role')
+     console.table(answers)
+     employeeUpdate()
+    })
+   
+  })
+}
 employeeUpdate()
